@@ -1,68 +1,53 @@
 <!--
 SYNC IMPACT REPORT
-Version: -> 1.0.0
+Version: 1.0.0 -> 2.0.0
 Modified Principles:
-- Added: I. Agentic Development Workflow
-- Added: II. Modern Full-Stack Architecture
-- Added: III. Secure Authentication & Authorization
-- Added: IV. Data Isolation & Privacy
-- Added: V. RESTful API Standards
+- Renamed & Updated: II. Modern Full-Stack Architecture -> II. Intelligent Agentic Stack (Added Grok, MCP, OpenAI Agents SDK)
+- Renamed & Updated: V. RESTful API Standards -> V. Stateless Chat & MCP Architecture
+- Added: VI. Grok Model Mandate
 Templates Status:
 - .specify/templates/plan-template.md: ✅ Compatible
 - .specify/templates/spec-template.md: ✅ Compatible
 - .specify/templates/tasks-template.md: ✅ Compatible
 -->
-# Phase II: Todo Full-Stack Web Application Constitution
+# Phase II: Hackathon Intelligent Todo Agent Constitution
 
 ## Core Principles
 
 ### I. Agentic Development Workflow
 The project strictly follows the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via AI Agent (Claude Code / Gemini). No manual coding is allowed. The process, prompts, and iterations are reviewed to judge each phase and project.
 
-### II. Modern Full-Stack Architecture
+### II. Intelligent Agentic Stack
 The application must adhere to the following stack:
-- **Frontend**: Next.js 16+ (App Router)
-- **Backend**: Python FastAPI
-- **ORM**: SQLModel
-- **Database**: Neon Serverless PostgreSQL
-- **Architecture**: Frontend and Backend must be distinct services.
+- **Frontend**: Next.js 16+ (App Router) utilizing OpenAI ChatKit (or functional equivalent).
+- **Backend**: Python FastAPI.
+- **AI Logic**: OpenAI Agents SDK.
+- **Tooling**: Official MCP (Model Context Protocol) SDK.
+- **Database**: Neon Serverless PostgreSQL (SQLModel ORM).
+- **Authentication**: Better Auth.
 
-### III. Secure Authentication & Authorization
-Authentication is implemented using Better Auth with JWT integration.
-- **Mechanism**: Better Auth (Frontend) issues JWTs; FastAPI (Backend) verifies them.
-- **Shared Secret**: Both services must use the same `BETTER_AUTH_SECRET` for signing/verification.
-- **Enforcement**: All protected endpoints must require a valid JWT token in the `Authorization` header. Requests without valid tokens must receive `401 Unauthorized`.
+### III. Model Context Protocol (MCP) First
+All task operations (Create, Read, Update, Delete) MUST be exposed as **MCP Tools** (`add_task`, `list_tasks`, `complete_task`, `delete_task`, `update_task`).
+- The AI Agent interacts with the database *exclusively* through these tools (or via internal service calls mapped to these tools).
+- Tools must be stateless and operate directly on the persisted database state.
 
-### IV. Data Isolation & Privacy
+### IV. Stateless Chat Architecture
+The system must operate on a stateless request cycle:
+1.  **Persist**: User messages and Assistant responses are stored in the database immediately.
+2.  **Context**: Full conversation history is fetched from the DB for each turn.
+3.  **Process**: The Agent processes the context and invokes tools.
+4.  **No In-Memory State**: The server must not rely on in-memory session storage between requests.
+
+### V. Grok Model Mandate
+**Grok** is the exclusive Large Language Model (LLM) for this project.
+- **Integration**: Use the OpenAI Agents SDK (or compatible client) but configure the API to target xAI's Grok.
+- **Credentials**: Use `GROK_API_KEY` (or xAI equivalent) instead of `OPENAI_API_KEY`.
+- **Constraint**: Do NOT use OpenAI's native models (GPT-4o, etc.) unless strictly for fallback compatibility testing.
+
+### VI. Secure Data Isolation
 User isolation is non-negotiable.
-- **Visibility**: Each user must only see and modify their own tasks.
-- **Implementation**: The backend must extract the user ID from the verified JWT and strictly filter all database queries by that ID.
-- **Statelessness**: Authentication must be stateless; no shared database sessions between frontend and backend for auth verification.
-
-### V. RESTful API Standards
-The backend must expose a RESTful API with the following standard endpoints (enforced per user):
-- `GET /api/{user_id}/tasks`: List all tasks
-- `POST /api/{user_id}/tasks`: Create a new task
-- `GET /api/{user_id}/tasks/{id}`: Get task details
-- `PUT /api/{user_id}/tasks/{id}`: Update a task
-- `DELETE /api/{user_id}/tasks/{id}`: Delete a task
-- `PATCH /api/{user_id}/tasks/{id}/complete`: Toggle completion
-
-## Security Requirements
-
-### JWT Verification
-FastAPI middleware must be used to verify JWT signatures and extract user identity before any business logic executes.
-
-### Environment Variables
-Secrets (specifically `BETTER_AUTH_SECRET` and database credentials) must be managed via environment variables and never hardcoded.
-
-## Development Workflow
-
-### Spec-Driven
-All features must start with a specification (`/specs/<feature>/spec.md`) defining user stories and acceptance criteria before any code is written.
-
-### Task-Based Execution
-Implementation is broken down into small, testable tasks (`/specs/<feature>/tasks.md`) derived from the plan.
+- **Scope**: All queries (MCP tools and API endpoints) must be scoped to the authenticated `user_id`.
+- **Auth**: Better Auth validates identity; the backend enforces scope.
 
 ## Governance
 
@@ -71,4 +56,4 @@ This Constitution serves as the primary source of truth for the project's archit
 - **Amendments**: Changes to these principles require a formal amendment to this Constitution, accompanied by a version bump and rationale.
 - **Compliance**: All Pull Requests and Design Reviews must explicitly verify compliance with these principles.
 
-**Version**: 1.0.0 | **Ratified**: 2025-12-30 | **Last Amended**: 2025-12-30
+**Version**: 2.0.0 | **Ratified**: 2025-12-30 | **Last Amended**: 2026-01-02

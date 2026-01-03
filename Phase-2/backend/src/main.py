@@ -4,12 +4,13 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from src.core.config import settings
 from src.core.database import create_db_and_tables
-from src.api.routes import tasks, dashboard
+from src.api.routes import tasks, dashboard, chat
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # In production, use Alembic. For MVP, this is fine.
     create_db_and_tables()
+    # Reload trigger
     yield
 
 app = FastAPI(
@@ -20,6 +21,7 @@ app = FastAPI(
 
 app.include_router(tasks.router, prefix=settings.API_V1_STR, tags=["tasks"])
 app.include_router(dashboard.router, prefix=f"{settings.API_V1_STR}/dashboard", tags=["dashboard"])
+app.include_router(chat.router, prefix=settings.API_V1_STR, tags=["chat"])
 
 # CORS
 origins = [

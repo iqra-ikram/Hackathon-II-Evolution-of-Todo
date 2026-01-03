@@ -1,7 +1,15 @@
+"use client";
+
 import React from "react";
-import { Heart, Calendar, Diamond, Settings, Plus } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Heart, Calendar, Diamond, Settings, Plus, MessageSquare } from "lucide-react";
 
 const Sidebar = () => {
+  const pathname = usePathname();
+
+  const isActive = (path: string) => pathname === path;
+
   return (
     <div className="flex flex-col items-center justify-between w-20 h-screen py-8 bg-[#080808] border-r border-[#1a1a1a] flex-shrink-0 sticky top-0 left-0">
       {/* Logo */}
@@ -11,11 +19,16 @@ const Sidebar = () => {
 
       {/* Navigation */}
       <div className="flex flex-col items-center space-y-4 flex-1">
+        <Link href="/dashboard" className={`p-3.5 transition-all duration-300 rounded-2xl ${isActive('/dashboard') ? 'text-white bg-[#1a1a1a] shadow-lg' : 'text-neutral-500 hover:text-white hover:bg-[#1a1a1a]'}`}>
+          <Calendar size={22} strokeWidth={isActive('/dashboard') ? 2.5 : 2} />
+        </Link>
+        
+        <Link href="/dashboard/chat" className={`p-3.5 transition-all duration-300 rounded-2xl ${isActive('/dashboard/chat') ? 'text-white bg-[#1a1a1a] shadow-lg' : 'text-neutral-500 hover:text-white hover:bg-[#1a1a1a]'}`}>
+          <MessageSquare size={22} strokeWidth={isActive('/dashboard/chat') ? 2.5 : 2} />
+        </Link>
+
         <button className="p-3.5 text-neutral-500 hover:text-white transition-all duration-300 rounded-2xl hover:bg-[#1a1a1a]">
           <Heart size={22} strokeWidth={2} />
-        </button>
-        <button className="p-3.5 text-white bg-[#1a1a1a] rounded-2xl transition-all duration-300 shadow-lg">
-          <Calendar size={22} strokeWidth={2.5} />
         </button>
         <button className="p-3.5 text-neutral-500 hover:text-white transition-all duration-300 rounded-2xl hover:bg-[#1a1a1a]">
           <Diamond size={22} strokeWidth={2} />

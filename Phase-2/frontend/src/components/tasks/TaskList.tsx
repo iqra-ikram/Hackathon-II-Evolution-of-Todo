@@ -15,7 +15,7 @@ export default function TaskList() {
   const loadTasks = async () => {
     if (!session?.user?.id) return;
     try {
-      const data = await fetchClient(`/api/${session.user.id}/tasks`);
+      const data = await fetchClient(`/${session.user.id}/tasks`);
       setTasks(data);
     } catch (e) {
       console.error("Failed to load tasks", e);
@@ -33,7 +33,7 @@ export default function TaskList() {
   const handleToggle = async (task: Task) => {
     if (!session?.user?.id) return;
     try {
-        await fetchClient(`/api/${session.user.id}/tasks/${task.id}/complete`, {
+        await fetchClient(`/${session.user.id}/tasks/${task.id}/complete`, {
             method: 'PATCH'
         });
         // Optimistic update
@@ -49,7 +49,7 @@ export default function TaskList() {
     if (!confirm("Are you sure you want to delete this task?")) return;
 
     try {
-        await fetchClient(`/api/${session.user.id}/tasks/${task.id}`, {
+        await fetchClient(`/${session.user.id}/tasks/${task.id}`, {
             method: 'DELETE'
         });
         setTasks(tasks.filter(t => t.id !== task.id));
@@ -58,10 +58,10 @@ export default function TaskList() {
     }
   };
 
-  if (loading) return <div>Loading tasks...</div>;
+  if (loading) return <div className="text-white text-center py-10">Loading tasks...</div>;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       {tasks.map((task) => (
         <TaskItem
           key={task.id}
@@ -71,7 +71,12 @@ export default function TaskList() {
           onEdit={setEditingTask}
         />
       ))}
-      {tasks.length === 0 && <p className="text-gray-500">No tasks found. Create one!</p>}
+      {tasks.length === 0 && (
+          <div className="text-center py-10">
+              <p className="text-neutral-500 mb-2">No tasks found</p>
+              <p className="text-neutral-600 text-sm">Use the form to create your first task</p>
+          </div>
+      )}
 
       {editingTask && (
         <EditTaskModal 

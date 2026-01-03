@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = '/api/backend';
 
 interface FetchOptions extends RequestInit {
   token?: string;
@@ -6,16 +6,14 @@ interface FetchOptions extends RequestInit {
 
 export async function fetchClient(endpoint: string, options: FetchOptions = {}) {
   const { token, ...fetchOptions } = options;
-  const url = `${API_URL}${endpoint}`;
+  // Ensure endpoint starts with /
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${API_URL}${cleanEndpoint}`;
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(options.headers as Record<string, string>),
   };
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
 
   const response = await fetch(url, {
     ...fetchOptions,

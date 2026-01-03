@@ -16,7 +16,7 @@ export default function CreateTaskForm({ onTaskCreated }: { onTaskCreated?: () =
 
     setIsSubmitting(true);
     try {
-      await fetchClient(`/api/${session.user.id}/tasks`, {
+      await fetchClient(`/${session.user.id}/tasks`, {
         method: "POST",
         body: JSON.stringify({ title, description }),
         // token: ...
@@ -33,30 +33,30 @@ export default function CreateTaskForm({ onTaskCreated }: { onTaskCreated?: () =
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 p-4 border rounded bg-gray-50">
-      <h3 className="font-bold mb-2">New Task</h3>
-      <div className="mb-2">
+    <form onSubmit={handleSubmit} className="mb-6 p-6 bg-[#111111] border border-[#1a1a1a] rounded-[32px] shadow-lg">
+      <h3 className="font-bold text-white mb-4 uppercase tracking-wide text-sm">New Task</h3>
+      <div className="mb-4">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Task title"
-          className="w-full p-2 border rounded"
+          placeholder="What needs to be done?"
+          className="w-full p-3 bg-[#1a1a1a] border border-[#252525] rounded-xl text-white placeholder-neutral-600 focus:outline-none focus:border-[#A3E635] transition-colors text-sm"
           required
         />
       </div>
-      <div className="mb-2">
+      <div className="mb-4">
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description (optional)"
-          className="w-full p-2 border rounded"
+          className="w-full p-3 bg-[#1a1a1a] border border-[#252525] rounded-xl text-white placeholder-neutral-600 focus:outline-none focus:border-[#A3E635] transition-colors text-sm min-h-[80px]"
         />
       </div>
       <button
         type="submit"
         disabled={isSubmitting}
-        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+        className="w-full bg-[#A3E635] text-black font-bold py-3 rounded-xl hover:bg-[#b0f542] transition-colors disabled:opacity-50 text-sm"
       >
         {isSubmitting ? "Creating..." : "Add Task"}
       </button>

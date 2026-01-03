@@ -9,8 +9,7 @@ class TaskService:
         self.session = session
 
     def create_task(self, task_create: TaskCreate, owner_id: str) -> Task:
-        task = Task.from_orm(task_create)
-        task.owner_id = owner_id
+        task = Task.model_validate(task_create, update={"owner_id": owner_id})
         self.session.add(task)
         self.session.commit()
         self.session.refresh(task)
@@ -20,6 +19,13 @@ class TaskService:
         statement = select(Task).where(Task.owner_id == owner_id)
         results = self.session.exec(statement)
         return results.all()
+
+    def search_tasks(self, query: str, owner_id: str) -> List[Task]:
+        statement = select(Task).where(
+            Task.owner_id == owner_id,
+            (Task.title.contains(query)) | (Task.description.contains(query))
+        )
+        return self.session.exec(statement).all()
 
     def get_task(self, task_id: UUID, owner_id: str) -> Optional[Task]:
         statement = select(Task).where(Task.id == task_id, Task.owner_id == owner_id)
