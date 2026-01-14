@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: Dynamic Dashboard API
+  version: 1.0.0
+paths:
+  /api/v1/dashboard/data:
+    get:
+      summary: Get aggregated dashboard data
+      operationId: getDashboardData
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardResponse'
+components:
+  schemas:
+    DashboardResponse:
+      type: object
+      properties:
+        customer_stat:
+          $ref: '#/components/schemas/StatCardData'
+        product_stat:
+          $ref: '#/components/schemas/StatCardData'
+        product_chart:
+          $ref: '#/components/schemas/ProductChartData'
+        timeline:
+          $ref: '#/components/schemas/TimelineData'
+      required:
+        - customer_stat
+        - product_stat
+        - product_chart
+        - timeline
+    StatCardData:
+      type: object
+      properties:
+        title:
+          type: string
+        metric_1:
+          $ref: '#/components/schemas/StatMetric'
+        metric_2:
+          $ref: '#/components/schemas/StatMetric'
+        chart_points_1:
+          type: array
+          items:
+            type: integer
+        matrix_pattern:
+          type: integer
+      required:
+        - title
+        - metric_1
+        - metric_2
+    StatMetric:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: number
+        trend:
+          type: string
+          enum: [up, down]
+      required:
+        - label
+        - value
+        - trend
+    ProductChartData:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductColumn'
+        total:
+          type: integer
+      required:
+        - columns
+        - total
+    ProductColumn:
+      type: object
+      properties:
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductChartSegment'
+      required:
+        - segments
+    ProductChartSegment:
+      type: object
+      properties:
+        value:
+          type: integer
+        type:
+          type: string
+          enum: [valid, invalid, resources]
+      required:
+        - value
+        - type
+    TimelineData:
+      type: object
+      properties:
+        dates:
+          type: array
+          items:
+            type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimelineItem'
+        total_projects:
+          type: integer
+      required:
+        - dates
+        - items
+        - total_projects
+    TimelineItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        day_index:
+          type: integer
+        start_percent:
+          type: integer
+        width_percent:
+          type: integer
+        category:
+          type: string
+          enum: [customer, product, web]
+        value:
+          type: integer
+        icon:
+          type: string
+        avatars:
+          type: boolean
+      required:
+        - id
+        - day_index
+        - start_percent
+        - width_percent
+        - category
+        - value

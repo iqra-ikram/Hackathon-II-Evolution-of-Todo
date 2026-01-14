@@ -1,0 +1,60 @@
+openapi: 3.1.0
+info:
+  title: Intelligent Todo Agent API
+  version: 1.0.0
+  description: API for the Grok-powered Todo Chatbot with MCP Tools.
+servers:
+  - url: http://localhost:8000
+    description: Local Development Server
+
+paths:
+  /api/chat:
+    post:
+      summary: Send a message to the AI Agent
+      operationId: chat
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: The user's natural language input.
+                conversation_id:
+                  type: integer
+                  description: Optional ID of existing conversation. If null, creates new.
+              required:
+                - message
+      responses:
+        '200':
+          description: AI Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversation_id:
+                    type: integer
+                  response:
+                    type: string
+                    description: The assistant's text response.
+                  tool_calls:
+                    type: array
+                    items:
+                      type: object
+                      description: Details of MCP tools invoked during processing.
+        '401':
+          description: Unauthorized (Missing/Invalid Token)
+        '500':
+          description: Internal Server Error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
