@@ -10,9 +10,9 @@ export const auth = betterAuth({
         enabled: true,
     },
     secret: process.env.BETTER_AUTH_SECRET!,
-    session: {
-        strategy: "jwt",
-    },
+    // session: {
+    //     strategy: "jwt",
+    // },
     plugins: [
         nextCookies(),
     ]

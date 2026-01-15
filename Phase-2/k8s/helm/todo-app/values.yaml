@@ -1,0 +1,34 @@
+backend:
+  replicaCount: 1
+  image:
+    repository: todo-backend
+    pullPolicy: IfNotPresent
+    tag: "v1"
+  service:
+    type: ClusterIP
+    port: 8000
+  env:
+    API_V1_STR: "/api"
+    PROJECT_NAME: "Todo App Phase 2"
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: todo-frontend
+    pullPolicy: IfNotPresent
+    tag: "v1"
+  service:
+    type: NodePort
+    port: 3000
+    nodePort: 30080
+  env:
+    NEXT_PUBLIC_API_URL: ""
+    INTERNAL_API_URL: "http://todo-app-backend:8000/api"
+    BETTER_AUTH_URL: "http://localhost:3000"
+    NEXT_PUBLIC_BETTER_AUTH_URL: ""
+
+# Secrets (to be populated via --set or values-local.yaml)
+secrets:
+  databaseUrl: ""
+  betterAuthSecret: ""
+  geminiApiKey: ""
