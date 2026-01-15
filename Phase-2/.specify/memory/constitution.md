@@ -1,53 +1,48 @@
 <!--
 SYNC IMPACT REPORT
-Version: 1.0.0 -> 2.0.0
+Version: 2.0.0 -> 4.0.0
 Modified Principles:
-- Renamed & Updated: II. Modern Full-Stack Architecture -> II. Intelligent Agentic Stack (Added Grok, MCP, OpenAI Agents SDK)
-- Renamed & Updated: V. RESTful API Standards -> V. Stateless Chat & MCP Architecture
-- Added: VI. Grok Model Mandate
+- Replaced: All previous principles (Phase II focus) with Phase IV Infrastructure focus.
+- Added: I. AI-Assisted DevOps (Mandate Gordon, kubectl-ai, Kagent)
+- Added: II. Cloud-Native Architecture (Docker, Kubernetes/Minikube)
+- Added: III. Declarative Infrastructure (Helm Charts)
+- Added: IV. Local Development Parity (Minikube target)
+- Added: V. Intelligent Todo Chatbot (Retain Phase III context)
 Templates Status:
 - .specify/templates/plan-template.md: ✅ Compatible
 - .specify/templates/spec-template.md: ✅ Compatible
 - .specify/templates/tasks-template.md: ✅ Compatible
 -->
-# Phase II: Hackathon Intelligent Todo Agent Constitution
+# Phase IV: Local Kubernetes Deployment Constitution
 
 ## Core Principles
 
-### I. Agentic Development Workflow
-The project strictly follows the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via AI Agent (Claude Code / Gemini). No manual coding is allowed. The process, prompts, and iterations are reviewed to judge each phase and project.
+### I. AI-Assisted DevOps
+Operations MUST utilize AI agents as the primary interface.
+- **Docker**: Use Docker AI Agent (Gordon) for container management and troubleshooting (`docker ai`).
+- **Kubernetes**: Use `kubectl-ai` for declarative command generation and `kagent` for cluster analysis/optimization.
+- **Manual Fallback**: Standard CLI commands are permitted only when AI agents are unavailable or fail.
 
-### II. Intelligent Agentic Stack
-The application must adhere to the following stack:
-- **Frontend**: Next.js 16+ (App Router) utilizing OpenAI ChatKit (or functional equivalent).
-- **Backend**: Python FastAPI.
-- **AI Logic**: OpenAI Agents SDK.
-- **Tooling**: Official MCP (Model Context Protocol) SDK.
-- **Database**: Neon Serverless PostgreSQL (SQLModel ORM).
-- **Authentication**: Better Auth.
+### II. Cloud-Native Architecture
+The system MUST be deployed as a set of containerized microservices.
+- **Containerization**: All components (Frontend, Backend) must be containerized using Docker.
+- **Orchestration**: Kubernetes (via Minikube) is the sole orchestration target for this phase.
+- **Registry**: Local Docker registry or Docker Desktop shared context is preferred for development speed.
 
-### III. Model Context Protocol (MCP) First
-All task operations (Create, Read, Update, Delete) MUST be exposed as **MCP Tools** (`add_task`, `list_tasks`, `complete_task`, `delete_task`, `update_task`).
-- The AI Agent interacts with the database *exclusively* through these tools (or via internal service calls mapped to these tools).
-- Tools must be stateless and operate directly on the persisted database state.
+### III. Declarative Infrastructure
+All infrastructure and deployment configurations MUST be declarative.
+- **Helm Charts**: Deployment logic must be encapsulated in Helm Charts.
+- **No Imperative Drift**: Avoid manual `kubectl create/edit` for persistent changes; commit changes to Charts/Manifests.
 
-### IV. Stateless Chat Architecture
-The system must operate on a stateless request cycle:
-1.  **Persist**: User messages and Assistant responses are stored in the database immediately.
-2.  **Context**: Full conversation history is fetched from the DB for each turn.
-3.  **Process**: The Agent processes the context and invokes tools.
-4.  **No In-Memory State**: The server must not rely on in-memory session storage between requests.
+### IV. Local Development Parity
+The local environment (Minikube) MUST mirror production architectural patterns.
+- **Minikube**: Use Minikube as the local cluster.
+- **Ingress**: Expose services via Minikube Ingress or port-forwarding that simulates real service discovery.
 
-### V. Grok Model Mandate
-**Grok** is the exclusive Large Language Model (LLM) for this project.
-- **Integration**: Use the OpenAI Agents SDK (or compatible client) but configure the API to target xAI's Grok.
-- **Credentials**: Use `GROK_API_KEY` (or xAI equivalent) instead of `OPENAI_API_KEY`.
-- **Constraint**: Do NOT use OpenAI's native models (GPT-4o, etc.) unless strictly for fallback compatibility testing.
-
-### VI. Secure Data Isolation
-User isolation is non-negotiable.
-- **Scope**: All queries (MCP tools and API endpoints) must be scoped to the authenticated `user_id`.
-- **Auth**: Better Auth validates identity; the backend enforces scope.
+### V. Intelligent Todo Chatbot
+The core application remains the Phase III Todo Chatbot.
+- **Stack**: Next.js Frontend + FastAPI Backend + Neon DB + Better Auth + Grok/OpenAI Agents SDK.
+- **Continuity**: Phase IV focuses on *deployment* of the existing Phase III application; application code changes should be minimal unless required for containerization.
 
 ## Governance
 
@@ -56,4 +51,4 @@ This Constitution serves as the primary source of truth for the project's archit
 - **Amendments**: Changes to these principles require a formal amendment to this Constitution, accompanied by a version bump and rationale.
 - **Compliance**: All Pull Requests and Design Reviews must explicitly verify compliance with these principles.
 
-**Version**: 2.0.0 | **Ratified**: 2025-12-30 | **Last Amended**: 2026-01-02
+**Version**: 4.0.0 | **Ratified**: 2026-01-08 | **Last Amended**: 2026-01-08

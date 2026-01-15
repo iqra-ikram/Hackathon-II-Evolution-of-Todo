@@ -24,9 +24,7 @@ app.include_router(dashboard.router, prefix=f"{settings.API_V1_STR}/dashboard", 
 app.include_router(chat.router, prefix=settings.API_V1_STR, tags=["chat"])
 
 # CORS
-origins = [
-    "http://localhost:3000",
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
