@@ -1,0 +1,26 @@
+backend:
+  image:
+    pullPolicy: Never
+  service:
+    type: ClusterIP
+
+frontend:
+  image:
+    pullPolicy: Never
+  service:
+    type: NodePort
+  env:
+    # These URLs must match what the browser uses to access the frontend
+    # For Minikube, use the NodePort URL. Get it with: minikube service todo-app-frontend -n todo-app --url
+    BETTER_AUTH_URL: "http://127.0.0.1:30080"
+    NEXT_PUBLIC_BETTER_AUTH_URL: "http://127.0.0.1:30080"
+    INTERNAL_API_URL: "http://todo-app-backend:8000/api"
+
+secrets:
+  # Using local in-cluster postgres service
+  # NOTE: If using Neon DB, replace this with the PLAIN TEXT connection string.
+  databaseUrl: "postgresql://neondb_owner:npg_C6wM8NYWOuco@ep-odd-shape-add990mo-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+  betterAuthSecret: "changeme_shared_secret_12345iqraabdullah"
+  # Using real Gemini API Key from environment
+  geminiApiKey: "AIzaSyA6yqc2i1TSghwDkh1niutwlfu8LHKKayY"
+  
