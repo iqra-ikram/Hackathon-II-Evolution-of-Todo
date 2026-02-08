@@ -50,7 +50,7 @@ const LandingNavbar = () => {
                     <ArrowRight size={16} />
                 </Link>
                 <Link href="/profile" className="flex items-center justify-center w-10 h-10 rounded-full bg-[#111111] border border-[#252525] text-white hover:border-[#A3E635] transition-colors">
-                     {session.user.image ? (
+                     {session?.user?.image ? (
                          <img src={session.user.image} alt="Profile" className="w-full h-full rounded-full object-cover" />
                      ) : (
                          <User size={18} />
