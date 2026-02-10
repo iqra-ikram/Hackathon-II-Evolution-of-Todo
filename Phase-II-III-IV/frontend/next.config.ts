@@ -4,7 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
 };
 
-if (!process.env.VERCEL) {
+// standalone output is only needed for Docker production builds.
+// It conflicts with Turbopack's module resolution in dev mode.
+if (!process.env.VERCEL && process.env.NODE_ENV === "production") {
   nextConfig.output = "standalone";
 }
 
