@@ -27,19 +27,25 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         const res = await fetchClient('/dashboard/data'); // Use fetchClient!
-        setData(res);
+        console.log("Dashboard Data Received:", res);
+
+        if (res && typeof res === 'object') {
+          setData(res);
+        } else {
+          throw new Error("Invalid data format received");
+        }
       } catch (error: any) {
         console.error(error);
         setError(error.message || "Failed to load dashboard data");
         if (error.message?.includes("401") || error.message?.includes("Unauthorized")) {
-          router.push("/login"); // Force re-login
+          // router.push("/login"); // Force re-login - careful with loop
         }
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [router]);
+  }, []); // Remove router to prevent loop
 
   if (loading) {
     return (
