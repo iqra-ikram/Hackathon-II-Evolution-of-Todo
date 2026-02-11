@@ -2,11 +2,15 @@ import { auth } from "@/lib/auth"; // Ensure this path is correct
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
-const BACKEND_URL = process.env.INTERNAL_API_URL || "http://127.0.0.1:8000/api";
+const BACKEND_URL = process.env.INTERNAL_API_URL || "https://iqra7-todo-backend-phase2.hf.space/api";
 
 async function proxy(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   const path = (await params).path.join("/");
   const url = `${BACKEND_URL}/${path}`;
+
+  if (!process.env.INTERNAL_API_URL) {
+    console.warn(`[Proxy] ⚠️ INTERNAL_API_URL is not set. Falling back to default: ${BACKEND_URL}`);
+  }
 
   console.log(`[Proxy] ----------------------------------------------------------------`);
   console.log(`[Proxy] Incoming request for: ${path}`);
